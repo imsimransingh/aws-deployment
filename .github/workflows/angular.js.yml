@@ -1,29 +1,35 @@
-# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
-
-name: Node.js CI
+name: Angular CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - main
 
 jobs:
   build:
-
+    name: Build and Test
     runs-on: self-hosted
 
-    strategy:
-      matrix:
-        node-version: [16.x, 18.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-
     steps:
-    - uses: actions/checkout@v3
-    - name: Use Node.js ${{ matrix.node-version }}
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+
+    - name: Set up Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - run: npm ci
-    - run: npm run build --if-present
-    - run: npm run build
+        node-version: 18
+
+    - name: Install Dependencies
+      run: npm install
+
+    - name: Build Angular App
+      run: npm run build -- -c=client
+
+    - name: Run Tests
+      run: npm run test -- -c=client 
+
+    - name: Upload Artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: build-artifacts
+        path: client/dist
