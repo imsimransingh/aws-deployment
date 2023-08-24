@@ -23,13 +23,13 @@ jobs:
       run: npm install
 
     - name: Build Angular App
-      run: npm run build -- -c=client
+      run: npm run build -- -c=./client/
 
     - name: Run Tests
-      run: npm run test -- -c=client 
+      run: npm run test -- -c=./client/ 
 
     - name: Upload Artifacts
       uses: actions/upload-artifact@v2
       with:
         name: build-artifacts
-        path: client/dist
+        path: ./client/dist
