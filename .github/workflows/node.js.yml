@@ -22,14 +22,14 @@ jobs:
           path: ~/.npm
           key: ${{ runner.os }}-node-16-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
-            ${{ runner.os }}-node-14
+            ${{ runner.os }}-node-16
       - name: npm install
         run: npm i
-        working-directory: ./backend
+        working-directory: ./server
 
       - run: git fetch --all
 
       - name: build
         run: npm run build
-        working-directory: ./backend
+        working-directory: ./server
         
