@@ -1,0 +1,36 @@
+---
+name: Angular Install
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+#### --------------
+jobs:
+  build:
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "16.x"
+
+      - uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-16-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-16
+      - name: npm install
+        run: npm i
+        working-directory: ./client
+
+      - run: git fetch --all
+
+      - name: build
+        run: npm run build
+        working-directory: ./client
+        
